@@ -55,10 +55,6 @@ export default function VerifySignaturePage() {
                 <Paper elevation={8} className="max-w-2xl w-full bg-white p-10 rounded-2xl shadow-xl border border-indigo-100">
                     <Box className="flex items-center mb-6 w-full">
                         <Button component={Link} href="/dashboard" startIcon={<ArrowBackIcon />} variant="outlined" color="primary" sx={{ borderRadius: 2, fontWeight: 500 }}>
-            <Box className="flex justify-center items-center min-h-[70vh]">
-                <Paper elevation={6} className="max-w-2xl w-full bg-white p-8 rounded-xl shadow">
-                    <Box className="flex items-center mb-4 w-full">
-                        <Button component={Link} href="/dashboard" startIcon={<ArrowBackIcon />} variant="text" color="primary" className="mr-2">
                             Voltar ao Menu
                         </Button>
                     </Box>
@@ -91,4 +87,4 @@ export default function VerifySignaturePage() {
             </Box>
         </Layout>
     );
-}
+} 

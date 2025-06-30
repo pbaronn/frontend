@@ -31,22 +31,29 @@ export default function SignExpensePage() {
     }, [id, user]);
 
     const handleSign = async () => {
-        if (!report) return;
+        if (!report) {
+            toast.error('Relatório não carregado!');
+            return;
+        }
         toast.loading('Assinando relatório...');
         try {
             const signature = await signHash(report.dataHash);
-            await api.post(`/reports/sign/${id}`, { signature });
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Usuário não autenticado!');
+            const response = await api.post(`/reports/sign/${id}`, { signature }, {
+                headers: { 'x-auth-token': token }
+            });
             toast.dismiss();
             toast.success('Relatório assinado com sucesso!');
-            router.push('/dashboard/expenses/pending');
+            router.push('/dashboard/expenses/signed');
         } catch (error) {
             toast.dismiss();
-            toast.error(error.message || 'Falha ao assinar.');
+            toast.error(error?.response?.data?.msg || error.message || 'Falha ao assinar.');
         }
     };
 
-    if (!user) return <Layout><div>Carregando...</div></Layout>;
-    if (!report) return <Layout><div>Carregando...</div></Layout>;
+    if (!user) return <Layout><div>Carregando usuário...</div></Layout>;
+    if (!report) return <Layout><div>Carregando relatório...</div></Layout>;
 
     return (
         <Layout>
@@ -68,13 +75,13 @@ export default function SignExpensePage() {
                         <Typography variant="body2" color="text.secondary"><strong>Enviado por:</strong> {report.submittedBy.name}</Typography>
                         <Typography variant="body2" color="text.secondary" className="break-all"><strong>Hash dos Dados:</strong> <code className="text-sm">{report.dataHash}</code></Typography>
                         {report.receipt && (
-                            <a href={`http://localhost:5000/${report.receipt.replace('uploads/receipts', 'uploads/receipts')}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
+                            <a href={`http://localhost:5000/uploads/receipts/${report.receipt && report.receipt.split(/[\\/]/).pop()}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
                                 Ver Recibo
                             </a>
                         )}
                     </div>
                     <Button onClick={handleSign} variant="contained" color="success" fullWidth sx={{ mt: 4, py: 1.5, borderRadius: 2, fontWeight: 600, fontSize: 18 }}>
-                        Assinar Digitalmente com Minha Chave
+                        ASSINAR DIGITALMENTE COM MINHA CHAVE
                     </Button>
                 </Paper>
             </Box>

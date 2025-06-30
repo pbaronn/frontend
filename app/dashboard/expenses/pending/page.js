@@ -59,7 +59,7 @@ export default function PendingExpensesPage() {
                                             Enviado por: <span className="font-semibold">{report.submittedBy.name}</span> | Valor: <span className="font-semibold">R$ {report.amount.toFixed(2)}</span>
                                         </Typography>
                                         {report.receipt && (
-                                            <a href={`http://localhost:5000/${report.receipt.replace('uploads/receipts', 'uploads/receipts')}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
+                                            <a href={`http://localhost:5000/uploads/receipts/${report.receipt && report.receipt.split(/[\\/]/).pop()}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
                                                 Ver Recibo
                                             </a>
                                         )}
